@@ -34,6 +34,8 @@ import {
   validateStep,
 } from '../utils/survey';
 
+const SURVEY_IS_OPEN = false;
+
 export default function SurveyPage() {
   const [formData, setFormData] = useState(initialFormState);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -123,6 +125,11 @@ export default function SurveyPage() {
   };
 
   const handleNext = async () => {
+    if (!SURVEY_IS_OPEN) {
+      setSubmitError('تم إغلاق الاستبيان حاليًا ولم يعد يستقبل ردودًا جديدة.');
+      return;
+    }
+
     if (currentStep.id === 'summary') {
       setSubmitError('');
       setIsSubmitting(true);
@@ -164,6 +171,41 @@ export default function SurveyPage() {
     setSubmitted(false);
     setSubmitError('');
   };
+
+  if (!SURVEY_IS_OPEN) {
+    return (
+      <div className="min-h-screen bg-hero-glow px-4 py-6 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-3xl">
+          <div className="glass-panel p-8 text-center sm:p-10">
+            <span className="inline-flex rounded-full bg-amber-100 px-4 py-2 text-sm font-extrabold text-amber-800">
+              الاستبيان مغلق
+            </span>
+            <h1 className="mt-6 text-3xl font-extrabold text-ink-900 sm:text-4xl">
+              تم إيقاف استقبال الردود الجديدة
+            </h1>
+            <p className="mt-4 text-base leading-8 text-slate-600 sm:text-lg">
+              نشكركم على الاهتمام بالمشاركة. تم إغلاق هذا الاستبيان حاليًا، لذلك لن يتم
+              استقبال أي استجابات جديدة من خلال الواجهة.
+            </p>
+            <p className="mt-3 text-sm leading-7 text-slate-500 sm:text-base">
+              إذا كنت من فريق الإدارة، يمكنك متابعة النتائج الحالية من لوحة الإدارة.
+            </p>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
+              <Button disabled>استقبال الردود متوقف</Button>
+              <Link
+                to="/admin/login"
+                className="inline-flex items-center justify-center gap-2 rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm font-extrabold text-ink-900 transition hover:border-brand-300 hover:text-brand-800"
+              >
+                <LayoutDashboard className="h-4 w-4" />
+                لوحة الإدارة
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   function renderStep() {
     if (submitted) {

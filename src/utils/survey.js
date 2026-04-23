@@ -200,10 +200,14 @@ function buildLabeledItems(questions, values) {
   }));
 }
 
-function buildArrayItems(answersArray) {
-  return answersArray.map((answer) => ({
-    label: answer.question,
-    answer: answer.answer,
+function buildStoredItems(questions, answersArray) {
+  const answersMap = new Map(
+    (answersArray || []).map((answer) => [answer.questionId, answer.answer || '-'])
+  );
+
+  return questions.map((question) => ({
+    label: question.label,
+    answer: answersMap.get(question.id) || '-',
   }));
 }
 
@@ -292,7 +296,7 @@ export function buildResponseSections(response) {
     },
     {
       title: sectionTitles.knowledge,
-      items: buildArrayItems(response.knowledge || []),
+      items: buildStoredItems(knowledgeQuestions, response.knowledge || []),
     },
   ];
 
@@ -300,15 +304,15 @@ export function buildResponseSections(response) {
     sections.push(
       {
         title: sectionTitles.practices,
-        items: buildArrayItems(response.practices || []),
+        items: buildStoredItems(practicesQuestions, response.practices || []),
       },
       {
         title: sectionTitles.attitudes,
-        items: buildArrayItems(response.attitudes || []),
+        items: buildStoredItems(attitudesQuestions, response.attitudes || []),
       },
       {
         title: sectionTitles.risks,
-        items: buildArrayItems(response.risks || []),
+        items: buildStoredItems(riskQuestions, response.risks || []),
       }
     );
   }
@@ -321,7 +325,10 @@ export function buildResponseSections(response) {
           label: question.label,
           answer: response.practitioner?.[question.id] || '-',
         })),
-        ...buildArrayItems(response.practitioner?.safetyPractices || []),
+        ...buildStoredItems(
+          practitionerSafetyQuestions,
+          response.practitioner?.safetyPractices || []
+        ),
       ],
     });
   }

@@ -21,6 +21,7 @@ npm run dev
 - `VITE_DEV_API_TARGET`: هدف الـ proxy المحلي، افتراضيًا `http://localhost:5001`.
 - `VITE_APP_BASE`: المسار الأساسي للأصول عند النشر.
 - `VITE_ROUTER_MODE`: `browser` محليًا أو `hash` عند GitHub Pages.
+- `VITE_SURVEY_IS_OPEN`: يفتح أو يغلق الاستبيان. القيمة الافتراضية `true`، واستخدم `false` لإيقاف استقبال الردود مؤقتًا.
 
 ## GitHub Pages
 
@@ -29,11 +30,24 @@ npm run dev
 قبل أول نشر، أضف Repository Variable باسم:
 
 - `VITE_API_URL`
+- `VITE_SURVEY_IS_OPEN`
 
-وقيمته يجب أن تكون رابط الـ backend المنشور، مثل:
+قيمة `VITE_API_URL` يجب أن تكون رابط الـ backend المنشور، مثل:
 
 ```text
 https://your-backend-domain.com/api
+```
+
+وقيمة `VITE_SURVEY_IS_OPEN` يمكن أن تكون:
+
+```text
+true
+```
+
+أو:
+
+```text
+false
 ```
 
 بعد ذلك فعّل GitHub Pages من إعدادات المستودع مع Source = GitHub Actions.

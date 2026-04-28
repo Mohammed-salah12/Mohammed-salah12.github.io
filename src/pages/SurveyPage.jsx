@@ -34,7 +34,7 @@ import {
   validateStep,
 } from '../utils/survey';
 
-const SURVEY_IS_OPEN = false;
+const SURVEY_IS_OPEN = (import.meta.env.VITE_SURVEY_IS_OPEN || 'true').toLowerCase() !== 'false';
 
 export default function SurveyPage() {
   const [formData, setFormData] = useState(initialFormState);
